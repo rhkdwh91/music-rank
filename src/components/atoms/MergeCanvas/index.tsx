@@ -3,17 +3,15 @@ import useMergeCanvas from "hooks/useMergeCanvas";
 import Canvas from "components/atoms/Canvas";
 
 interface MergeCanvasProps {
-    canvases: (HTMLCanvasElement|null)[];
+  canvases: (HTMLCanvasElement | null)[];
 }
 
-export default function MergeCanvas ({ canvases }: MergeCanvasProps) {
-    const { ref, mergeCanvas } = useMergeCanvas({ canvases });
+export default function MergeCanvas({ canvases }: MergeCanvasProps) {
+  const { ref, mergeCanvas } = useMergeCanvas({ canvases });
 
-    useEffect(() => {
-        mergeCanvas();
-    }, []);
+  useEffect(() => {
+    mergeCanvas();
+  }, []);
 
-    return (
-        <Canvas ref={ref} />
-    )
+  return <Canvas ref={ref} />;
 }

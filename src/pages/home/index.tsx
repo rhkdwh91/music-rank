@@ -15,15 +15,6 @@ const instance = axios.create({
   baseURL: "https://itunes.apple.com/us/rss",
 });
 
-interface TopalbumsParams {
-  limit: number;
-}
-
-const getTopalbums = async ({ limit = 100 }: TopalbumsParams) => {
-  const { data } = await instance.get(`/topalbums/limit=${limit}/json`);
-  return data;
-};
-
 export default function Home() {
   const [openModalId, setOpenModalId] = useState<string | null>(null);
   const [ranks, setRanks] = useState<Rank[]>([]);
@@ -40,10 +31,10 @@ export default function Home() {
     drawFn: rightDraw,
   } = useDrawCanvas({ strokeStyle: "#A52A2A", init: Boolean(openModalId) });
 
-  const getMusicLank = async () => {
+  const getMusicLanks = async () => {
     try {
       setIsLoading(true);
-      const data = await getTopalbums({ limit: 100 });
+      const { data } = await instance.get(`/topalbums/limit=100/json`);
       setRanks(data.feed.entry);
     } catch (error) {
       console.error(error);
@@ -54,7 +45,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    getMusicLank();
+    getMusicLanks();
   }, []);
 
   const handleOpenModal = (id: string) => {
@@ -114,7 +105,7 @@ export default function Home() {
         {openModalId && (
           <Modal>
             <Modal.Layout>
-              <Modal.Title>표지생성</Modal.Title>
+              <Modal.Title>앨범 생성</Modal.Title>
               <Modal.Body>
                 <div className="canvas-wrap">
                   <div>
@@ -138,14 +129,13 @@ export default function Home() {
                 </div>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={handleClickConfirm}>확인</Button>
-                <Button onClick={handleCloseModal}>닫기</Button>
+                <Button onClick={handleCloseModal}>취소</Button>
+                <Button onClick={handleClickConfirm}>결합</Button>
               </Modal.Footer>
             </Modal.Layout>
           </Modal>
         )}
       </div>
-      <div id="modal-root"></div>
     </div>
   );
 }
